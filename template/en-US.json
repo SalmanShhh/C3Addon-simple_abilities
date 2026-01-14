@@ -1,0 +1,485 @@
+{
+  "languageTag": "en-US",
+  "fileDescription": "Strings for salmanshh_simple_abilities.",
+  "text": {
+    "behaviors": {
+      "salmanshh_simple_abilities": {
+        "name": "Simple Abilities",
+        "description": "A lightweight ability system for fast-paced action games. Handles ability granting, cooldowns, activation callbacks, and custom data storage. Perfect for Nuclear Throne-style arcade games with quick ability activations and passive mutations.",
+        "help-url": "https://www.construct.net",
+        "aceCategories": {
+          "AbilityManagement": "AbilityManagement",
+          "AbilityState": "AbilityState",
+          "Cooldowns": "Cooldowns",
+          "CustomData": "CustomData",
+          "Stacks": "Stacks",
+          "Query": "Query",
+          "Triggers": "Triggers",
+          "Info": "Info"
+        },
+        "properties": {},
+        "actions": {
+          "ActivateAbility": {
+            "list-name": "Activate ability",
+            "display-text": "Activate ability [b]{0}[/b]",
+            "description": "Trigger an ability activation callback. Only works if ability is ready (off cooldown and enabled).",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability to activate"
+              }
+            }
+          },
+          "ClearAllAbilities": {
+            "list-name": "Clear all abilities",
+            "display-text": "Clear all abilities",
+            "description": "Remove all abilities from the object. Triggers removal event for each ability.",
+            "params": {}
+          },
+          "CreateAbility": {
+            "list-name": "Create ability",
+            "display-text": "Create ability [b]{0}[/b]",
+            "description": "Give the object an ability. Creates a new ability slot if it doesn't exist.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for this ability"
+              }
+            }
+          },
+          "CreateAbilityWithCooldown": {
+            "list-name": "Create ability with cooldown",
+            "display-text": "Create ability [b]{0}[/b] with [b]{1}[/b] second cooldown",
+            "description": "Give the object an ability and set its cooldown in one action. Useful for initial setup.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for this ability"
+              },
+              "cooldown": {
+                "name": "Cooldown",
+                "desc": "Cooldown duration in seconds"
+              }
+            }
+          },
+          "CreateAbilityWithCooldownAndStacks": {
+            "list-name": "Create ability with cooldown and stacks",
+            "display-text": "Create ability [b]{0}[/b] with [b]{1}[/b]s cooldown and [b]{2}[/b] max stacks",
+            "description": "Give the object an ability and set its cooldown and max stacks in one action. Perfect for charge-based abilities.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for this ability"
+              },
+              "cooldown": {
+                "name": "Cooldown",
+                "desc": "Cooldown/regeneration duration in seconds"
+              },
+              "maxStacks": {
+                "name": "Max stacks",
+                "desc": "Maximum number of charges"
+              }
+            }
+          },
+          "RemoveAbility": {
+            "list-name": "Remove ability",
+            "display-text": "Remove ability [b]{0}[/b]",
+            "description": "Remove an ability from the object. Deletes all associated data.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability to remove"
+              }
+            }
+          },
+          "SetAbilityActive": {
+            "list-name": "Set ability active",
+            "display-text": "Set [b]{0}[/b] active to [b]{1}[/b]",
+            "description": "Set whether an ability is currently active (for channeled/duration abilities).",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "active": {
+                "name": "Active",
+                "desc": "Whether the ability should be active",
+                "items": {
+                  "active": "Active",
+                  "inactive": "Inactive"
+                }
+              }
+            }
+          },
+          "SetAbilityEnabled": {
+            "list-name": "Set ability enabled",
+            "display-text": "Set [b]{0}[/b] enabled to [b]{1}[/b]",
+            "description": "Enable or disable an ability. Disabled abilities cannot be activated even if off cooldown.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "enabled": {
+                "name": "Enabled",
+                "desc": "Whether the ability should be enabled",
+                "items": {
+                  "enabled": "Enabled",
+                  "disabled": "Disabled"
+                }
+              }
+            }
+          },
+          "ResetCooldown": {
+            "list-name": "Reset cooldown",
+            "display-text": "Reset [b]{0}[/b] cooldown",
+            "description": "Instantly reset an ability's cooldown to 0, making it ready to use immediately.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "SetAbilityCooldown": {
+            "list-name": "Set ability cooldown",
+            "display-text": "Set [b]{0}[/b] cooldown to [b]{1}[/b] seconds",
+            "description": "Set the cooldown time for an ability. The ability will not be usable until the cooldown expires.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "seconds": {
+                "name": "Seconds",
+                "desc": "Cooldown duration in seconds"
+              }
+            }
+          },
+          "SetAbilityData": {
+            "list-name": "Set ability data",
+            "display-text": "Set [b]{0}[/b] data [b]{1}[/b] to [b]{2}[/b]",
+            "description": "Store custom data on an ability (for passive bonuses, damage values, etc). Data is stored as strings.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "key": {
+                "name": "Key",
+                "desc": "Data key/name"
+              },
+              "value": {
+                "name": "Value",
+                "desc": "Data value (will be converted to string)"
+              }
+            }
+          },
+          "AddStacks": {
+            "list-name": "Add ability stacks",
+            "display-text": "Add [b]{1}[/b] stacks to [b]{0}[/b]",
+            "description": "Add charges to an ability. Will not exceed max stacks.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "count": {
+                "name": "Count",
+                "desc": "Number of charges to add"
+              }
+            }
+          },
+          "ConsumeStack": {
+            "list-name": "Consume ability stack",
+            "display-text": "Consume 1 stack of [b]{0}[/b]",
+            "description": "Manually consume one charge of an ability without triggering activation. Starts stack regeneration.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "SetMaxStacks": {
+            "list-name": "Set ability max stacks",
+            "display-text": "Set [b]{0}[/b] max stacks to [b]{1}[/b]",
+            "description": "Set the maximum number of charges an ability can have. Current stacks will be clamped to new max.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "maxStacks": {
+                "name": "Max stacks",
+                "desc": "Maximum number of charges"
+              }
+            }
+          },
+          "SetStacks": {
+            "list-name": "Set ability stacks",
+            "display-text": "Set [b]{0}[/b] stacks to [b]{1}[/b]",
+            "description": "Set the current number of charges for an ability. Clamped between 0 and max stacks.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "stacks": {
+                "name": "Stacks",
+                "desc": "Number of charges to set"
+              }
+            }
+          }
+        },
+        "conditions": {
+          "CompareCooldownRemaining": {
+            "list-name": "Compare cooldown remaining",
+            "display-text": "[b]{0}[/b] cooldown [b]{1}[/b] [b]{2}[/b]",
+            "description": "Compare the remaining cooldown time of an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "comparison": {
+                "name": "Comparison",
+                "desc": "How to compare the cooldown"
+              },
+              "value": {
+                "name": "Value",
+                "desc": "Value to compare against (in seconds)"
+              }
+            }
+          },
+          "CompareStacks": {
+            "list-name": "Compare stacks",
+            "display-text": "[b]{0}[/b] stacks [b]{1}[/b] [b]{2}[/b]",
+            "description": "Compare the current number of charges for an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "comparison": {
+                "name": "Comparison",
+                "desc": "How to compare the stacks"
+              },
+              "value": {
+                "name": "Value",
+                "desc": "Value to compare against"
+              }
+            }
+          },
+          "HasAbility": {
+            "list-name": "Has ability",
+            "display-text": "Has ability [b]{0}[/b]",
+            "description": "Check if the object has been granted a specific ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability to check"
+              }
+            }
+          },
+          "HasStacks": {
+            "list-name": "Has stacks available",
+            "display-text": "Has [b]{0}[/b] stacks available",
+            "description": "Check if an ability has at least one charge available.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "IsAbilityActive": {
+            "list-name": "Is ability active",
+            "display-text": "Is [b]{0}[/b] active",
+            "description": "Check if an ability is currently active (for channeled/duration abilities).",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "IsAbilityEnabled": {
+            "list-name": "Is ability enabled",
+            "display-text": "Is [b]{0}[/b] enabled",
+            "description": "Check if an ability is enabled (can be used when off cooldown).",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "IsAbilityReady": {
+            "list-name": "Is ability ready",
+            "display-text": "Is [b]{0}[/b] ready",
+            "description": "Check if an ability is off cooldown and enabled (ready to use).",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "OnAbilityActivated": {
+            "list-name": "On ability activated",
+            "display-text": "On [b]{0}[/b] activated",
+            "description": "Triggered when an ability is activated.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          },
+          "OnAbilityCreated": {
+            "list-name": "On ability created",
+            "display-text": "On [b]{0}[/b] created",
+            "description": "Triggered when an ability is created for the object.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          },
+          "OnAbilityReady": {
+            "list-name": "On ability ready",
+            "display-text": "On [b]{0}[/b] ready",
+            "description": "Triggered when an ability's cooldown expires and becomes ready to use.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          },
+          "OnAbilityRemoved": {
+            "list-name": "On ability removed",
+            "display-text": "On [b]{0}[/b] removed",
+            "description": "Triggered when an ability is removed from the object.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          },
+          "OnStackConsumed": {
+            "list-name": "On stack consumed",
+            "display-text": "On [b]{0}[/b] stack consumed",
+            "description": "Triggered when a charge is consumed from an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          },
+          "OnStackGained": {
+            "list-name": "On stack gained",
+            "display-text": "On [b]{0}[/b] stack gained",
+            "description": "Triggered when a charge is regenerated or added to an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          }
+        },
+        "expressions": {
+          "GetAbilityCount": {
+            "translated-name": "GetAbilityCount",
+            "description": "Get the total number of abilities currently granted.",
+            "params": {}
+          },
+          "GetAbilityData": {
+            "translated-name": "GetAbilityData",
+            "description": "Get custom data stored on an ability. Returns empty string if not found.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "key": {
+                "name": "Key",
+                "desc": "Data key to retrieve"
+              }
+            }
+          },
+          "GetCooldownProgress": {
+            "translated-name": "GetCooldownProgress",
+            "description": "Get the cooldown progress from 0 (ready) to 1 (just started). Useful for UI progress bars.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetCooldownRemaining": {
+            "translated-name": "GetCooldownRemaining",
+            "description": "Get the remaining cooldown time in seconds for an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetMaxStacks": {
+            "translated-name": "GetMaxStacks",
+            "description": "Get the maximum number of charges for an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetStackCooldownRemaining": {
+            "translated-name": "GetStackCooldownRemaining",
+            "description": "Get the time remaining in seconds until the next stack regenerates.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetStackProgress": {
+            "translated-name": "GetStackProgress",
+            "description": "Get the stack regeneration progress from 0 (about to regenerate) to 1 (just used). Useful for UI.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetStacks": {
+            "translated-name": "GetStacks",
+            "description": "Get the current number of charges available for an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "ListActiveAbilities": {
+            "translated-name": "ListActiveAbilities",
+            "description": "Get a comma-separated list of all ability IDs currently granted.",
+            "params": {}
+          }
+        }
+      }
+    }
+  }
+}
