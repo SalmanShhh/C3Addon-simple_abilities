@@ -81,6 +81,21 @@
               }
             }
           },
+          "CreateTemporaryAbility": {
+            "list-name": "Create temporary ability",
+            "display-text": "Create temporary ability [b]{0}[/b] that expires after [b]{1}[/b] seconds",
+            "description": "Create an ability that automatically removes itself after a duration. If ability already exists, just schedules new removal time Perfect for temporary power-ups and time-limited buffs.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for this ability"
+              },
+              "duration": {
+                "name": "Duration",
+                "desc": "Time in seconds before ability is removed"
+              }
+            }
+          },
           "RemoveAbility": {
             "list-name": "Remove ability",
             "display-text": "Remove ability [b]{0}[/b]",
@@ -89,6 +104,21 @@
               "abilityID": {
                 "name": "Ability ID",
                 "desc": "Unique identifier for the ability to remove"
+              }
+            }
+          },
+          "RemoveAbilityAfter": {
+            "list-name": "Remove ability after duration",
+            "display-text": "Remove ability [b]{0}[/b] after [b]{1}[/b] seconds",
+            "description": "Schedule automatic removal of an ability after a duration. Useful for temporary power-ups and time-limited abilities.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              },
+              "duration": {
+                "name": "Duration",
+                "desc": "Time in seconds before ability is removed"
               }
             }
           },
@@ -426,6 +456,16 @@
           "GetCooldownRemaining": {
             "translated-name": "GetCooldownRemaining",
             "description": "Get the remaining cooldown time in seconds for an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetExpirationTime": {
+            "translated-name": "GetExpirationTime",
+            "description": "Get the time remaining in seconds before an ability is automatically removed. Returns 0 if no removal scheduled.",
             "params": {
               "abilityID": {
                 "name": "Ability ID",

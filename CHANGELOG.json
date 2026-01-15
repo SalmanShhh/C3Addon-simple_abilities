@@ -8,5 +8,10 @@
     "added": "Ability Management\n- Create/remove abilities with unique IDs\n- Enable/disable abilities independently\n- Active state tracking for channeled abilities\n\nCooldown System\n- Automatic cooldown tracking per frame\n- \"On Ready\" triggers when cooldowns expire\n- Manual cooldown manipulation\n\nStack/Charge System\n- Multi-use abilities (dash 3 times, throw 5 grenades)\n- Automatic charge regeneration\n- Individual stack consumption with triggers\n\nCustom Data Storage\n- Store arbitrary key-value data per ability\n- Perfect for damage values, range, passive bonuses\n- Lazy-loaded for memory efficiency\n\nEvent Triggers\n- On Ability Ready/Activated/Created/Removed\n- On Stack Consumed/Gained\n- Filter by specific ability or catch all",
     "changed": "",
     "fixed": ""
+  },
+  "1.1.0.0": {
+    "added": "Implement temporary ability management and automatic removal features",
+    "changed": "Debugger: Abilities retain their behaviour's name so its easier to know which behaviour instance they originate from.",
+    "fixed": ""
   }
 }

@@ -52,9 +52,19 @@ export default function (parentClass) {
       if (this._activeTimerCount === 0) return;
       
       const dt = this.instance.dt;
+      const currentTime = this.runtime.gameTime; //Return the in-game time in seconds, which is affected by the time scale, so we use it for scheduling.
       
       // Update cooldowns and stack regeneration
       for (const [abilityID, ability] of this._abilities) {
+        // Check for scheduled removal
+        if (ability.hasRemovalScheduled && currentTime >= ability.removeAt) {
+          this._abilities.delete(abilityID);
+          this._activeTimerCount--;
+          this._invalidateCache();
+          this._triggerAbility(abilityID, "OnAbilityRemoved");
+          continue;
+        }
+        
         // Skip abilities not on cooldown and not regenerating stacks
         if (ability.cooldown <= 0 && ability.stackCooldown <= 0) continue;
         
@@ -192,7 +202,7 @@ export default function (parentClass) {
         }
 
         props.push({
-          title: `$Ability: ${abilityID}`,
+          title: `${this.behaviorType.name}: ${abilityID}`,
           properties: abilityProps
         });
       }
@@ -258,6 +268,8 @@ export default function (parentClass) {
           stacks: ability.stacks,
           maxStacks: ability.maxStacks,
           stackCooldown: ability.stackCooldown,
+          removeAt: ability.removeAt || 0,
+          hasRemovalScheduled: ability.hasRemovalScheduled || false,
           data: ability.data ? Array.from(ability.data.entries()) : []
         });
       }
@@ -286,6 +298,7 @@ export default function (parentClass) {
           // Count active timers
           if (cooldown > 0) this._activeTimerCount++;
           if (stackCooldown > 0) this._activeTimerCount++;
+          if (abilityData.hasRemovalScheduled) this._activeTimerCount++;
           
           this._abilities.set(abilityData.id, {
             cooldown: cooldown,
@@ -295,6 +308,8 @@ export default function (parentClass) {
             maxStacks: abilityData.maxStacks !== undefined ? abilityData.maxStacks : 1,
             stackCooldown: stackCooldown,
             canRegenerate: maxCooldown > 0,  // Optimization #10
+            removeAt: abilityData.removeAt || 0,
+            hasRemovalScheduled: abilityData.hasRemovalScheduled || false,
             data: abilityData.data && abilityData.data.length > 0 ? new Map(abilityData.data) : null
           });
         }

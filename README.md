@@ -1,38 +1,18 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Simple Abilities
 <i>A lightweight ability system for fast-paced action games. Handles ability granting, cooldowns, activation callbacks, and custom data storage. Perfect for Nuclear Throne-style arcade games with quick ability activations and passive mutations.</i> <br>
-### Version 1.0.0.0
+### Version 1.1.0.0
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/simple_abilities/releases/download/salmanshh_simple_abilities-1.0.0.0.c3addon/salmanshh_simple_abilities-1.0.0.0.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.1.0.0.c3addon/salmanshh_simple_abilities-1.1.0.0.c3addon)
 <br>
-<sub> [See all releases](https://github.com/SalmanShhh/simple_abilities/releases) </sub> <br>
+<sub> [See all releases](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases) </sub> <br>
 
-#### What's New in 1.0.0.0
+#### What's New in 1.1.0.0
 **Added:**
-Ability Management
-- Create/remove abilities with unique IDs
-- Enable/disable abilities independently
-- Active state tracking for channeled abilities
+Implement temporary ability management and automatic removal features
 
-Cooldown System
-- Automatic cooldown tracking per frame
-- "On Ready" triggers when cooldowns expire
-- Manual cooldown manipulation
-
-Stack/Charge System
-- Multi-use abilities (dash 3 times, throw 5 grenades)
-- Automatic charge regeneration
-- Individual stack consumption with triggers
-
-Custom Data Storage
-- Store arbitrary key-value data per ability
-- Perfect for damage values, range, passive bonuses
-- Lazy-loaded for memory efficiency
-
-Event Triggers
-- On Ability Ready/Activated/Created/Removed
-- On Stack Consumed/Gained
-- Filter by specific ability or catch all
+**Changed:**
+Debugger: Abilities retain their behaviour's name so its easier to know which behaviour instance they originate from.
 
 
 <sub>[View full changelog](#changelog)</sub>
@@ -81,7 +61,9 @@ npm run dev
 | Create ability | Give the object an ability. Creates a new ability slot if it doesn't exist. | Ability ID             *(string)* <br> |
 | Create ability with cooldown | Give the object an ability and set its cooldown in one action. Useful for initial setup. | Ability ID             *(string)* <br>Cooldown             *(number)* <br> |
 | Create ability with cooldown and stacks | Give the object an ability and set its cooldown and max stacks in one action. Perfect for charge-based abilities. | Ability ID             *(string)* <br>Cooldown             *(number)* <br>Max stacks             *(number)* <br> |
+| Create temporary ability | Create an ability that automatically removes itself after a duration. If ability already exists, just schedules new removal time Perfect for temporary power-ups and time-limited buffs. | Ability ID             *(string)* <br>Duration             *(number)* <br> |
 | Remove ability | Remove an ability from the object. Deletes all associated data. | Ability ID             *(string)* <br> |
+| Remove ability after duration | Schedule automatic removal of an ability after a duration. Useful for temporary power-ups and time-limited abilities. | Ability ID             *(string)* <br>Duration             *(number)* <br> |
 | Set ability active | Set whether an ability is currently active (for channeled/duration abilities). | Ability ID             *(string)* <br>Active             *(combo)* <br> |
 | Set ability enabled | Enable or disable an ability. Disabled abilities cannot be activated even if off cooldown. | Ability ID             *(string)* <br>Enabled             *(combo)* <br> |
 | Reset cooldown | Instantly reset an ability's cooldown to 0, making it ready to use immediately. | Ability ID             *(string)* <br> |
@@ -120,6 +102,7 @@ npm run dev
 | GetAbilityData | Get custom data stored on an ability. Returns empty string if not found. | string | Ability ID *(string)* <br>Key *(string)* <br> | 
 | GetCooldownProgress | Get the cooldown progress from 0 (ready) to 1 (just started). Useful for UI progress bars. | number | Ability ID *(string)* <br> | 
 | GetCooldownRemaining | Get the remaining cooldown time in seconds for an ability. | number | Ability ID *(string)* <br> | 
+| GetExpirationTime | Get the time remaining in seconds before an ability is automatically removed. Returns 0 if no removal scheduled. | number | Ability ID *(string)* <br> | 
 | GetMaxStacks | Get the maximum number of charges for an ability. | number | Ability ID *(string)* <br> | 
 | GetStackCooldownRemaining | Get the time remaining in seconds until the next stack regenerates. | number | Ability ID *(string)* <br> | 
 | GetStackProgress | Get the stack regeneration progress from 0 (about to regenerate) to 1 (just used). Useful for UI. | number | Ability ID *(string)* <br> | 
@@ -129,6 +112,16 @@ npm run dev
 
 ---
 ## Changelog
+
+### Version 1.1.0.0
+
+**Added:**
+Implement temporary ability management and automatic removal features
+
+**Changed:**
+Debugger: Abilities retain their behaviour's name so its easier to know which behaviour instance they originate from.
+
+---
 
 ### Version 1.0.0.0
 

@@ -37,6 +37,8 @@ action(
         maxStacks: 1,
         stackCooldown: 0,
         canRegenerate: false,  // Optimization #10
+        removeAt: 0,
+        hasRemovalScheduled: false,
         data: null
       });
       
@@ -90,6 +92,8 @@ action(
         maxStacks: 1,
         stackCooldown: 0,
         canRegenerate: cooldownValue > 0,  // Optimization #10
+        removeAt: 0,
+        hasRemovalScheduled: false,
         data: null
       });
       
@@ -158,6 +162,8 @@ action(
         maxStacks: maxStacksValue,
         stackCooldown: 0,
         canRegenerate: cooldownValue > 0,
+        removeAt: 0,
+        hasRemovalScheduled: false,
         data: null
       });
       
@@ -170,6 +176,113 @@ action(
       ability.maxStacks = maxStacksValue;
       ability.stacks = Math.min(ability.stacks, maxStacksValue);
       ability.canRegenerate = cooldownValue > 0;
+    }
+  }
+);
+
+action(
+  "AbilityManagement",
+  "CreateTemporaryAbility",
+  {
+    listName: "Create temporary ability",
+    displayText: "Create temporary ability [b]{0}[/b] that expires after [b]{1}[/b] seconds",
+    description: "Create an ability that automatically removes itself after a duration. If ability already exists, just schedules new removal time Perfect for temporary power-ups and time-limited buffs.",
+    isAsync: false,
+    highlight: false,
+    deprecated: false,
+    params: [
+      {
+        id: "abilityID",
+        name: "Ability ID",
+        desc: "Unique identifier for this ability",
+        type: "string",
+        initialValue: '""',
+      },
+      {
+        id: "duration",
+        name: "Duration",
+        desc: "Time in seconds before ability is removed",
+        type: "number",
+        initialValue: "10",
+      },
+    ],
+  },
+  function (abilityID, duration) {
+    if (!abilityID) return;
+    
+    const durationValue = Math.max(0, duration);
+    
+    // Create ability if it doesn't exist
+    if (!this._abilities.has(abilityID)) {
+      this._abilities.set(abilityID, {
+        cooldown: 0,
+        maxCooldown: 0,
+        flags: 1,  // FLAG_ENABLED
+        stacks: 1,
+        maxStacks: 1,
+        stackCooldown: 0,
+        canRegenerate: false,
+        removeAt: this.runtime.gameTime + durationValue,
+        hasRemovalScheduled: true,
+        data: null
+      });
+      
+      this._activeTimerCount++;
+      this._invalidateCache();
+      this._triggerAbility(abilityID, "OnAbilityCreated");
+    } else {
+      // If ability exists, just schedule removal
+      const ability = this._abilities.get(abilityID);
+      ability.removeAt = this.runtime.gameTime + durationValue;
+      
+      if (!ability.hasRemovalScheduled) {
+        ability.hasRemovalScheduled = true;
+        this._activeTimerCount++;
+      }
+    }
+  }
+);
+
+action(
+  "AbilityManagement",
+  "RemoveAbilityAfter",
+  {
+    listName: "Remove ability after duration",
+    displayText: "Remove ability [b]{0}[/b] after [b]{1}[/b] seconds",
+    description: "Schedule automatic removal of an ability after a duration. Useful for temporary power-ups and time-limited abilities.",
+    isAsync: false,
+    highlight: false,
+    deprecated: false,
+    params: [
+      {
+        id: "abilityID",
+        name: "Ability ID",
+        desc: "Unique identifier for the ability",
+        type: "string",
+        initialValue: '""',
+      },
+      {
+        id: "duration",
+        name: "Duration",
+        desc: "Time in seconds before ability is removed",
+        type: "number",
+        initialValue: "10",
+      },
+    ],
+  },
+  function (abilityID, duration) {
+    const ability = abilityID && this._abilities.get(abilityID);
+    if (!ability) return;
+    
+    const durationValue = Math.max(0, duration);
+    
+    // Schedule removal
+    ability.removeAt = this.runtime.gameTime + durationValue;
+    
+    // Track if we need to check for removal
+    if (!ability.hasRemovalScheduled) {
+      ability.hasRemovalScheduled = true;
+      this._activeTimerCount++;
     }
   }
 );
@@ -1220,6 +1333,32 @@ expression(
     if (!ability || ability.maxCooldown === 0) return 0;
     
     return ability.stackCooldown / ability.maxCooldown;
+  }
+);
+
+expression(
+  "Info",
+  "GetExpirationTime",
+  {
+    returnType: "number",
+    description: "Get the time remaining in seconds before an ability is automatically removed. Returns 0 if no removal scheduled.",
+    highlight: false,
+    deprecated: false,
+    params: [
+      {
+        id: "abilityID",
+        name: "Ability ID",
+        desc: "Unique identifier for the ability",
+        type: "string",
+      },
+    ],
+  },
+  function (abilityID) {
+    const ability = abilityID && this._abilities.get(abilityID);
+    if (!ability || !ability.hasRemovalScheduled) return 0;
+    
+    const timeRemaining = ability.removeAt - this.runtime.gameTime;
+    return Math.max(0, timeRemaining);
   }
 );
 
