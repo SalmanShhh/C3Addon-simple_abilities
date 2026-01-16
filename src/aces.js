@@ -573,7 +573,15 @@ action(
     const ability = abilityID && this._abilities.get(abilityID);
     if (!ability) return;
     
-    ability.stacks = Math.min(ability.stacks + Math.floor(count), ability.maxStacks);
+    const newTotal = ability.stacks + Math.floor(count);
+    const wasAtMax = ability.stacks >= ability.maxStacks;
+    
+    // Trigger if attempting to exceed max
+    if (newTotal > ability.maxStacks) {
+      this._triggerAbility(abilityID, "OnMaxStacksReached");
+    }
+    
+    ability.stacks = Math.min(newTotal, ability.maxStacks);
     
     // Stop regeneration if at max
     if (ability.stacks >= ability.maxStacks && ability.stackCooldown > 0) {
@@ -1165,6 +1173,34 @@ condition(
     listName: "On stack gained",
     displayText: "On [b]{0}[/b] stack gained",
     description: "Triggered when a charge is regenerated or added to an ability.",
+    isTrigger: true,
+    isInvertible: false,
+    highlight: true,
+    deprecated: false,
+    params: [
+      {
+        id: "abilityID",
+        name: "Ability ID",
+        desc: "Unique identifier for the ability (empty string for any ability)",
+        type: "string",
+        initialValue: '""',
+      },
+    ],
+  },
+  function (abilityID) {
+    if (!abilityID) return true; // Any ability
+    
+    return this._currentAbilityID === abilityID;
+  }
+);
+
+condition(
+  "Triggers",
+  "OnMaxStacksReached",
+  {
+    listName: "On max stacks reached",
+    displayText: "On [b]{0}[/b] max stacks reached",
+    description: "Triggered when attempting to add charges beyond the maximum stack limit. Useful for UI feedback or sound effects.",
     isTrigger: true,
     isInvertible: false,
     highlight: true,

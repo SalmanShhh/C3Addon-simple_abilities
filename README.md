@@ -1,18 +1,15 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Simple Abilities
 <i>A lightweight ability system for fast-paced action games. Handles ability granting, cooldowns, activation callbacks, and custom data storage. Perfect for Nuclear Throne-style arcade games with quick ability activations and passive mutations.</i> <br>
-### Version 1.1.0.0
+### Version 1.1.1.0
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.1.0.0.c3addon/salmanshh_simple_abilities-1.1.0.0.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.1.1.0.c3addon/salmanshh_simple_abilities-1.1.1.0.c3addon)
 <br>
 <sub> [See all releases](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases) </sub> <br>
 
-#### What's New in 1.1.0.0
+#### What's New in 1.1.1.0
 **Added:**
-Implement temporary ability management and automatic removal features
-
-**Changed:**
-Debugger: Abilities retain their behaviour's name so its easier to know which behaviour instance they originate from.
+Add trigger for max stacks reached event in ability system
 
 
 <sub>[View full changelog](#changelog)</sub>
@@ -90,6 +87,7 @@ npm run dev
 | On ability created | Triggered when an ability is created for the object. | Ability ID *(string)* <br> |
 | On ability ready | Triggered when an ability's cooldown expires and becomes ready to use. | Ability ID *(string)* <br> |
 | On ability removed | Triggered when an ability is removed from the object. | Ability ID *(string)* <br> |
+| On max stacks reached | Triggered when attempting to add charges beyond the maximum stack limit. Useful for UI feedback or sound effects. | Ability ID *(string)* <br> |
 | On stack consumed | Triggered when a charge is consumed from an ability. | Ability ID *(string)* <br> |
 | On stack gained | Triggered when a charge is regenerated or added to an ability. | Ability ID *(string)* <br> |
 
@@ -112,6 +110,13 @@ npm run dev
 
 ---
 ## Changelog
+
+### Version 1.1.1.0
+
+**Added:**
+Add trigger for max stacks reached event in ability system
+
+---
 
 ### Version 1.1.0.0
 

@@ -400,6 +400,17 @@
               }
             }
           },
+          "OnMaxStacksReached": {
+            "list-name": "On max stacks reached",
+            "display-text": "On [b]{0}[/b] max stacks reached",
+            "description": "Triggered when attempting to add charges beyond the maximum stack limit. Useful for UI feedback or sound effects.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability (empty string for any ability)"
+              }
+            }
+          },
           "OnStackConsumed": {
             "list-name": "On stack consumed",
             "display-text": "On [b]{0}[/b] stack consumed",

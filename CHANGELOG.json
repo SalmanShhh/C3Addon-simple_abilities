@@ -13,5 +13,10 @@
     "added": "Implement temporary ability management and automatic removal features",
     "changed": "Debugger: Abilities retain their behaviour's name so its easier to know which behaviour instance they originate from.",
     "fixed": ""
+  },
+  "1.1.1.0": {
+    "added": "Add trigger for max stacks reached event in ability system",
+    "changed": "",
+    "fixed": ""
   }
 }
