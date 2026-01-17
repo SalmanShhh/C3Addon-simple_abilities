@@ -18,5 +18,10 @@
     "added": "Add trigger for max stacks reached event in ability system",
     "changed": "",
     "fixed": ""
+  },
+  "1.2.0.0": {
+    "added": "- Expiration TIme for abilities shows up on Debugger.\n- GetExpirationProgress(Ability ID) expression \nAdd expiration tracking to abilities with GetExpirationProgress method",
+    "changed": "",
+    "fixed": ""
   }
 }

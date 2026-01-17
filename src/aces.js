@@ -39,6 +39,7 @@ action(
         canRegenerate: false,  // Optimization #10
         removeAt: 0,
         hasRemovalScheduled: false,
+        expirationDuration: 0,
         data: null
       });
       
@@ -94,6 +95,7 @@ action(
         canRegenerate: cooldownValue > 0,  // Optimization #10
         removeAt: 0,
         hasRemovalScheduled: false,
+        expirationDuration: 0,
         data: null
       });
       
@@ -164,6 +166,7 @@ action(
         canRegenerate: cooldownValue > 0,
         removeAt: 0,
         hasRemovalScheduled: false,
+        expirationDuration: 0,
         data: null
       });
       
@@ -224,6 +227,7 @@ action(
         canRegenerate: false,
         removeAt: this.runtime.gameTime + durationValue,
         hasRemovalScheduled: true,
+        expirationDuration: durationValue,
         data: null
       });
       
@@ -234,6 +238,7 @@ action(
       // If ability exists, just schedule removal
       const ability = this._abilities.get(abilityID);
       ability.removeAt = this.runtime.gameTime + durationValue;
+      ability.expirationDuration = durationValue;
       
       if (!ability.hasRemovalScheduled) {
         ability.hasRemovalScheduled = true;
@@ -278,6 +283,7 @@ action(
     
     // Schedule removal
     ability.removeAt = this.runtime.gameTime + durationValue;
+    ability.expirationDuration = durationValue;
     
     // Track if we need to check for removal
     if (!ability.hasRemovalScheduled) {
@@ -1088,7 +1094,7 @@ condition(
   {
     listName: "On ability removed",
     displayText: "On [b]{0}[/b] removed",
-    description: "Triggered when an ability is removed from the object.",
+    description: "Triggered when an ability is removed from the object. The ability may be removed due to expiration or manual removal.",
     isTrigger: true,
     isInvertible: false,
     highlight: true,
@@ -1116,7 +1122,7 @@ condition(
   {
     listName: "On ability removed",
     displayText: "On [b]{0}[/b] removed",
-    description: "Triggered when an ability is removed from the object.",
+    description: "Triggered when an ability is removed from the object. The ability may be removed due to expiration or manual removal.",
     isTrigger: true,
     isInvertible: false,
     highlight: true,
@@ -1144,7 +1150,7 @@ condition(
   {
     listName: "On stack consumed",
     displayText: "On [b]{0}[/b] stack consumed",
-    description: "Triggered when a charge is consumed from an ability.",
+    description: "Triggered when a charge is consumed from an ability. The ability may lose charges due to activation or manual consumption.",
     isTrigger: true,
     isInvertible: false,
     highlight: true,
@@ -1172,7 +1178,7 @@ condition(
   {
     listName: "On stack gained",
     displayText: "On [b]{0}[/b] stack gained",
-    description: "Triggered when a charge is regenerated or added to an ability.",
+    description: "Triggered when a charge is regenerated or added to an ability. The ability may gain charges due to regeneration or manual addition.",
     isTrigger: true,
     isInvertible: false,
     highlight: true,
@@ -1395,6 +1401,33 @@ expression(
     
     const timeRemaining = ability.removeAt - this.runtime.gameTime;
     return Math.max(0, timeRemaining);
+  }
+);
+
+expression(
+  "Info",
+  "GetExpirationProgress",
+  {
+    returnType: "number",
+    description: "Get the expiration progress from 0 (just created) to 1 (about to expire). Useful for countdown UI bars.",
+    highlight: false,
+    deprecated: false,
+    params: [
+      {
+        id: "abilityID",
+        name: "Ability ID",
+        desc: "Unique identifier for the ability",
+        type: "string",
+      },
+    ],
+  },
+  function (abilityID) {
+    const ability = abilityID && this._abilities.get(abilityID);
+    if (!ability || !ability.hasRemovalScheduled || ability.expirationDuration === 0) return 0;
+    
+    const timeRemaining = ability.removeAt - this.runtime.gameTime;
+    const progress = 1 - (timeRemaining / ability.expirationDuration);
+    return Math.max(0, Math.min(1, progress));
   }
 );
 

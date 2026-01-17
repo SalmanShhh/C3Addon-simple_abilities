@@ -392,7 +392,7 @@
           "OnAbilityRemoved": {
             "list-name": "On ability removed",
             "display-text": "On [b]{0}[/b] removed",
-            "description": "Triggered when an ability is removed from the object.",
+            "description": "Triggered when an ability is removed from the object. The ability may be removed due to expiration or manual removal.",
             "params": {
               "abilityID": {
                 "name": "Ability ID",
@@ -414,7 +414,7 @@
           "OnStackConsumed": {
             "list-name": "On stack consumed",
             "display-text": "On [b]{0}[/b] stack consumed",
-            "description": "Triggered when a charge is consumed from an ability.",
+            "description": "Triggered when a charge is consumed from an ability. The ability may lose charges due to activation or manual consumption.",
             "params": {
               "abilityID": {
                 "name": "Ability ID",
@@ -425,7 +425,7 @@
           "OnStackGained": {
             "list-name": "On stack gained",
             "display-text": "On [b]{0}[/b] stack gained",
-            "description": "Triggered when a charge is regenerated or added to an ability.",
+            "description": "Triggered when a charge is regenerated or added to an ability. The ability may gain charges due to regeneration or manual addition.",
             "params": {
               "abilityID": {
                 "name": "Ability ID",
@@ -467,6 +467,16 @@
           "GetCooldownRemaining": {
             "translated-name": "GetCooldownRemaining",
             "description": "Get the remaining cooldown time in seconds for an ability.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
+          "GetExpirationProgress": {
+            "translated-name": "GetExpirationProgress",
+            "description": "Get the expiration progress from 0 (just created) to 1 (about to expire). Useful for countdown UI bars.",
             "params": {
               "abilityID": {
                 "name": "Ability ID",

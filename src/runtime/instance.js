@@ -191,6 +191,17 @@ export default function (parentClass) {
           { name: "$Stack cooldown", value: ability.stackCooldown.toFixed(2) + "s", readonly: true },
         ];
 
+        // Add expiration time if scheduled
+        if (ability.hasRemovalScheduled) {
+          const currentTime = this.runtime.gameTime;
+          const expirationTime = Math.max(0, ability.removeAt - currentTime);
+          abilityProps.push({ 
+            name: "$Expiration time", 
+            value: expirationTime.toFixed(2) + "s", 
+            readonly: true 
+          });
+        }
+
         // Add custom data if any
         if (ability.data && ability.data.size > 0) {
           for (const [key, value] of ability.data) {
@@ -270,6 +281,7 @@ export default function (parentClass) {
           stackCooldown: ability.stackCooldown,
           removeAt: ability.removeAt || 0,
           hasRemovalScheduled: ability.hasRemovalScheduled || false,
+          expirationDuration: ability.expirationDuration || 0,
           data: ability.data ? Array.from(ability.data.entries()) : []
         });
       }
@@ -310,6 +322,7 @@ export default function (parentClass) {
             canRegenerate: maxCooldown > 0,  // Optimization #10
             removeAt: abilityData.removeAt || 0,
             hasRemovalScheduled: abilityData.hasRemovalScheduled || false,
+            expirationDuration: abilityData.expirationDuration || 0,
             data: abilityData.data && abilityData.data.length > 0 ? new Map(abilityData.data) : null
           });
         }
