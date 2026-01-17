@@ -11,7 +11,6 @@
 **Added:**
 - Expiration TIme for abilities shows up on Debugger.
 - GetExpirationProgress(Ability ID) expression 
-Add expiration tracking to abilities with GetExpirationProgress method
 
 
 <sub>[View full changelog](#changelog)</sub>
@@ -119,7 +118,6 @@ npm run dev
 **Added:**
 - Expiration TIme for abilities shows up on Debugger.
 - GetExpirationProgress(Ability ID) expression 
-Add expiration tracking to abilities with GetExpirationProgress method
 
 ---
 
