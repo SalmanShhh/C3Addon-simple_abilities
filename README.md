@@ -1,18 +1,16 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Simple Abilities
 <i>A lightweight ability system for fast-paced action games. Handles ability granting, cooldowns, activation callbacks, and custom data storage. Perfect for Nuclear Throne-style arcade games with quick ability activations and passive mutations.</i> <br>
-### Version 1.3.0.0
+### Version 1.3.1.0
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.3.0.0.c3addon/salmanshh_simple_abilities-1.3.0.0.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.3.1.0.c3addon/salmanshh_simple_abilities-1.3.1.0.c3addon)
 <br>
 <sub> [See all releases](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases) </sub> <br>
 
-#### What's New in 1.3.0.0
-**Added:**
-- GetMaxExpirationTime() expression.
-
+#### What's New in 1.3.1.0
 **Fixed:**
-- performance improvements, the addon will now scale significantly better. With 1000+ instances having mostly idle abilities, only the few with active cooldowns/regeneration will consume CPU time, meaning it only ticks if theres an active timer (expiration/cooldowns)
+"IsAbilityReady" condition is correctly returns True/False by checking for stacks.
+Update ability readiness now properly includes stack availability
 
 <sub>[View full changelog](#changelog)</sub>
 
@@ -84,7 +82,7 @@ npm run dev
 | Has stacks available | Check if an ability has at least one charge available. | Ability ID *(string)* <br> |
 | Is ability active | Check if an ability is currently active (for channeled/duration abilities). | Ability ID *(string)* <br> |
 | Is ability enabled | Check if an ability is enabled (can be used when off cooldown). | Ability ID *(string)* <br> |
-| Is ability ready | Check if an ability is off cooldown and enabled (ready to use). | Ability ID *(string)* <br> |
+| Is ability ready | Check if an ability is off cooldown, has stacks available, and is enabled (ready to use). | Ability ID *(string)* <br> |
 | On ability activated | Triggered when an ability is activated. | Ability ID *(string)* <br> |
 | On ability created | Triggered when an ability is created for the object. | Ability ID *(string)* <br> |
 | On ability ready | Triggered when an ability's cooldown expires and becomes ready to use. | Ability ID *(string)* <br> |
@@ -114,6 +112,13 @@ npm run dev
 
 ---
 ## Changelog
+
+### Version 1.3.1.0
+
+**Fixed:**
+"IsAbilityReady" condition is correctly returns True/False by checking for stacks.
+Update ability readiness now properly includes stack availability
+---
 
 ### Version 1.3.0.0
 

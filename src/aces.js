@@ -831,7 +831,7 @@ condition(
   {
     listName: "Is ability ready",
     displayText: "Is [b]{0}[/b] ready",
-    description: "Check if an ability is off cooldown and enabled (ready to use).",
+    description: "Check if an ability is off cooldown, has stacks available, and is enabled (ready to use).",
     isTrigger: false,
     isInvertible: true,
     highlight: false,
@@ -851,7 +851,7 @@ condition(
     if (!ability) return false;
     
     const enabled = this._hasFlag(ability, 1);  // FLAG_ENABLED
-    return ability.cooldown === 0 && enabled;
+    return ability.cooldown === 0 && ability.stacks > 0 && enabled;
   }
 );
 

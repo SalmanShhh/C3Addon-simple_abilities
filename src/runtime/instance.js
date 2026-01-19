@@ -210,7 +210,7 @@ export default function (parentClass) {
         const abilityProps = [
           { name: "Cooldown", value: ability.cooldown.toFixed(2) + "s" },
           { name: "$Max cooldown", value: ability.maxCooldown.toFixed(2) + "s", readonly: true },
-          { name: "$Ready", value: ability.cooldown === 0 && enabled, readonly: true },
+          { name: "$Ready", value: ability.cooldown === 0 && ability.stacks > 0 && enabled, readonly: true },
           { name: "$Enabled", value: enabled },
           { name: "$Active", value: active },
           { name: "$Stacks", value: ability.stacks },

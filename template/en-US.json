@@ -348,7 +348,7 @@
           "IsAbilityReady": {
             "list-name": "Is ability ready",
             "display-text": "Is [b]{0}[/b] ready",
-            "description": "Check if an ability is off cooldown and enabled (ready to use).",
+            "description": "Check if an ability is off cooldown, has stacks available, and is enabled (ready to use).",
             "params": {
               "abilityID": {
                 "name": "Ability ID",
