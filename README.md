@@ -9,8 +9,7 @@
 
 #### What's New in 1.3.1.0
 **Fixed:**
-"IsAbilityReady" condition is correctly returns True/False by checking for stacks.
-Update ability readiness now properly includes stack availability
+- "IsAbilityReady" conditionnow properly includes stack availability
 
 <sub>[View full changelog](#changelog)</sub>
 
@@ -116,8 +115,7 @@ npm run dev
 ### Version 1.3.1.0
 
 **Fixed:**
-"IsAbilityReady" condition is correctly returns True/False by checking for stacks.
-Update ability readiness now properly includes stack availability
+- "IsAbilityReady" conditionnow properly includes stack availability
 ---
 
 ### Version 1.3.0.0
