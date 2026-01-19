@@ -494,6 +494,16 @@
               }
             }
           },
+          "GetMaxExpirationTime": {
+            "translated-name": "GetMaxExpirationTime",
+            "description": "Get the maximum expiration duration in seconds that was set for an ability. Returns 0 if no expiration was set.",
+            "params": {
+              "abilityID": {
+                "name": "Ability ID",
+                "desc": "Unique identifier for the ability"
+              }
+            }
+          },
           "GetMaxStacks": {
             "translated-name": "GetMaxStacks",
             "description": "Get the maximum number of charges for an ability.",

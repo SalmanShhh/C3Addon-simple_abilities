@@ -83,7 +83,11 @@ action(
     
     // Create or update ability
     if (!this._abilities.has(abilityID)) {
-      if (cooldownValue > 0) this._activeTimerCount++;
+      if (cooldownValue > 0) {
+        this._activeTimerCount++;
+        this._activeAbilities.add(abilityID);
+        if (this._activeTimerCount === 1) this._setTicking(true);
+      }
       
       this._abilities.set(abilityID, {
         cooldown: cooldownValue,
@@ -109,7 +113,11 @@ action(
       ability.maxCooldown = Math.max(ability.maxCooldown, cooldownValue);
       ability.canRegenerate = ability.maxCooldown > 0;
       
-      if (!wasOnCooldown && cooldownValue > 0) this._activeTimerCount++;
+      if (!wasOnCooldown && cooldownValue > 0) {
+        this._activeTimerCount++;
+        this._activeAbilities.add(abilityID);
+        if (this._activeTimerCount === 1) this._setTicking(true);
+      }
     }
   }
 );
@@ -232,6 +240,8 @@ action(
       });
       
       this._activeTimerCount++;
+      this._activeAbilities.add(abilityID);
+      if (this._activeTimerCount === 1) this._setTicking(true);
       this._invalidateCache();
       this._triggerAbility(abilityID, "OnAbilityCreated");
     } else {
@@ -243,6 +253,8 @@ action(
       if (!ability.hasRemovalScheduled) {
         ability.hasRemovalScheduled = true;
         this._activeTimerCount++;
+        this._activeAbilities.add(abilityID);
+        if (this._activeTimerCount === 1) this._setTicking(true);
       }
     }
   }
@@ -289,6 +301,8 @@ action(
     if (!ability.hasRemovalScheduled) {
       ability.hasRemovalScheduled = true;
       this._activeTimerCount++;
+      this._activeAbilities.add(abilityID);
+      if (this._activeTimerCount === 1) this._setTicking(true);
     }
   }
 );
@@ -342,6 +356,7 @@ action(
     }
     
     this._abilities.clear();
+    this._activeAbilities.clear();
     this._activeTimerCount = 0;
     this._invalidateCache();
   }
@@ -382,6 +397,8 @@ action(
     if (ability.stacks < ability.maxStacks && ability.stackCooldown === 0 && ability.canRegenerate) {
       ability.stackCooldown = ability.maxCooldown;
       this._activeTimerCount++;
+      this._activeAbilities.add(abilityID);
+      if (this._activeTimerCount === 1) this._setTicking(true);
     }
     
     // Trigger activation callback
@@ -429,7 +446,11 @@ action(
     ability.maxCooldown = Math.max(ability.maxCooldown, ability.cooldown);
     ability.canRegenerate = ability.maxCooldown > 0;
     
-    if (!wasOnCooldown && ability.cooldown > 0) this._activeTimerCount++;
+    if (!wasOnCooldown && ability.cooldown > 0) {
+      this._activeTimerCount++;
+      this._activeAbilities.add(abilityID);
+      if (this._activeTimerCount === 1) this._setTicking(true);
+    }
   }
 );
 
@@ -541,6 +562,8 @@ action(
     if (ability.stacks < ability.maxStacks && ability.stackCooldown === 0 && ability.canRegenerate) {
       ability.stackCooldown = ability.maxCooldown;
       this._activeTimerCount++;
+      this._activeAbilities.add(abilityID);
+      if (this._activeTimerCount === 1) this._setTicking(true);
     } else if (ability.stacks >= ability.maxStacks && wasRegenerating) {
       ability.stackCooldown = 0;
       this._activeTimerCount--;
@@ -627,6 +650,8 @@ action(
     if (ability.stacks < ability.maxStacks && ability.stackCooldown === 0 && ability.canRegenerate) {
       ability.stackCooldown = ability.maxCooldown;
       this._activeTimerCount++;
+      this._activeAbilities.add(abilityID);
+      if (this._activeTimerCount === 1) this._setTicking(true);
     }
     
     this._triggerAbility(abilityID, "OnStackConsumed");
@@ -1428,6 +1453,29 @@ expression(
     const timeRemaining = ability.removeAt - this.runtime.gameTime;
     const progress = 1 - (timeRemaining / ability.expirationDuration);
     return Math.max(0, Math.min(1, progress));
+  }
+);
+
+expression(
+  "Info",
+  "GetMaxExpirationTime",
+  {
+    returnType: "number",
+    description: "Get the maximum expiration duration in seconds that was set for an ability. Returns 0 if no expiration was set.",
+    highlight: false,
+    deprecated: false,
+    params: [
+      {
+        id: "abilityID",
+        name: "Ability ID",
+        desc: "Unique identifier for the ability",
+        type: "string",
+      },
+    ],
+  },
+  function (abilityID) {
+    const ability = abilityID && this._abilities.get(abilityID);
+    return ability ? ability.expirationDuration : 0;
   }
 );
 

@@ -1,17 +1,18 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Simple Abilities
 <i>A lightweight ability system for fast-paced action games. Handles ability granting, cooldowns, activation callbacks, and custom data storage. Perfect for Nuclear Throne-style arcade games with quick ability activations and passive mutations.</i> <br>
-### Version 1.2.0.0
+### Version 1.3.0.0
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.2.0.0.c3addon/salmanshh_simple_abilities-1.2.0.0.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.3.0.0.c3addon/salmanshh_simple_abilities-1.3.0.0.c3addon)
 <br>
 <sub> [See all releases](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases) </sub> <br>
 
-#### What's New in 1.2.0.0
+#### What's New in 1.3.0.0
 **Added:**
-- Expiration TIme for abilities shows up on Debugger.
-- GetExpirationProgress(Ability ID) expression 
+- GetMaxExpirationTime() expression.
 
+**Fixed:**
+- performance improvements, the addon will now scale significantly better. With 1000+ instances having mostly idle abilities, only the few with active cooldowns/regeneration will consume CPU time, meaning it only ticks if theres an active timer (expiration/cooldowns)
 
 <sub>[View full changelog](#changelog)</sub>
 
@@ -103,6 +104,7 @@ npm run dev
 | GetCooldownRemaining | Get the remaining cooldown time in seconds for an ability. | number | Ability ID *(string)* <br> | 
 | GetExpirationProgress | Get the expiration progress from 0 (just created) to 1 (about to expire). Useful for countdown UI bars. | number | Ability ID *(string)* <br> | 
 | GetExpirationTime | Get the time remaining in seconds before an ability is automatically removed. Returns 0 if no removal scheduled. | number | Ability ID *(string)* <br> | 
+| GetMaxExpirationTime | Get the maximum expiration duration in seconds that was set for an ability. Returns 0 if no expiration was set. | number | Ability ID *(string)* <br> | 
 | GetMaxStacks | Get the maximum number of charges for an ability. | number | Ability ID *(string)* <br> | 
 | GetStackCooldownRemaining | Get the time remaining in seconds until the next stack regenerates. | number | Ability ID *(string)* <br> | 
 | GetStackProgress | Get the stack regeneration progress from 0 (about to regenerate) to 1 (just used). Useful for UI. | number | Ability ID *(string)* <br> | 
@@ -112,6 +114,15 @@ npm run dev
 
 ---
 ## Changelog
+
+### Version 1.3.0.0
+
+**Added:**
+- GetMaxExpirationTime() expression.
+
+**Fixed:**
+- performance improvements, the addon will now scale significantly better. With 1000+ instances having mostly idle abilities, only the few with active cooldowns/regeneration will consume CPU time, meaning it only ticks if theres an active timer (expiration/cooldowns)
+---
 
 ### Version 1.2.0.0
 

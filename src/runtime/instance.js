@@ -16,6 +16,9 @@ export default function (parentClass) {
       // Ability storage: Map<abilityID, {cooldown, maxCooldown, flags, stacks, maxStacks, stackCooldown, canRegenerate, data}>
       this._abilities = new Map();
       
+      // Optimization #2: Track abilities with active timers for sparse iteration
+      this._activeAbilities = new Set();
+      
       // Optimization #5: Track count of abilities with active timers
       this._activeTimerCount = 0;
       
@@ -48,60 +51,84 @@ export default function (parentClass) {
     }
 
     _tick() {
-      // Optimization #5: Early exit when no active timers
-      if (this._activeTimerCount === 0) return;
+      // Optimization #1 & #5: Early exit when no active timers
+      if (this._activeTimerCount === 0) {
+        this._setTicking(false);
+        return;
+      }
       
+      // Optimization #3: Cache runtime reference
+      const runtime = this.runtime;
       const dt = this.instance.dt;
-      const currentTime = this.runtime.gameTime; //Return the in-game time in seconds, which is affected by the time scale, so we use it for scheduling.
+      const currentTime = runtime.gameTime;
       
-      // Update cooldowns and stack regeneration
-      for (const [abilityID, ability] of this._abilities) {
+      // Optimization #2: Iterate only active abilities with timers
+      for (const abilityID of this._activeAbilities) {
+        const ability = this._abilities.get(abilityID);
+        if (!ability) {
+          this._activeAbilities.delete(abilityID);
+          continue;
+        }
+        
+        let hasActiveTimers = false;
+        
+        // Optimization #6: Process all timer types in one iteration
+        
         // Check for scheduled removal
         if (ability.hasRemovalScheduled && currentTime >= ability.removeAt) {
           this._abilities.delete(abilityID);
+          this._activeAbilities.delete(abilityID);
           this._activeTimerCount--;
           this._invalidateCache();
           this._triggerAbility(abilityID, "OnAbilityRemoved");
           continue;
         }
-        
-        // Skip abilities not on cooldown and not regenerating stacks
-        if (ability.cooldown <= 0 && ability.stackCooldown <= 0) continue;
+        if (ability.hasRemovalScheduled) hasActiveTimers = true;
         
         // Update regular cooldown
         if (ability.cooldown > 0) {
-          const wasOnCooldown = true;
           ability.cooldown -= dt;
           if (ability.cooldown < 0) ability.cooldown = 0;
           
           // Trigger "On ability ready" when cooldown reaches 0
-          if (ability.cooldown === 0 && wasOnCooldown) {
+          if (ability.cooldown === 0) {
             this._activeTimerCount--;
             this._triggerAbility(abilityID, "OnAbilityReady");
+          } else {
+            hasActiveTimers = true;
           }
         }
         
-        // Optimization #10: Skip stack regeneration if ability can't regenerate
-        if (!ability.canRegenerate) continue;
-        
-        // Stack regeneration
-        if (ability.stacks < ability.maxStacks && ability.stackCooldown > 0) {
+        // Stack regeneration (only if ability can regenerate)
+        if (ability.canRegenerate && ability.stacks < ability.maxStacks && ability.stackCooldown > 0) {
           ability.stackCooldown -= dt;
           
           if (ability.stackCooldown <= 0) {
             ability.stacks++;
-            
             this._triggerAbility(abilityID, "OnStackGained");
             
             // Continue regenerating if not at max
             if (ability.stacks < ability.maxStacks) {
               ability.stackCooldown = ability.maxCooldown;
+              hasActiveTimers = true;
             } else {
               ability.stackCooldown = 0;
               this._activeTimerCount--;
             }
+          } else {
+            hasActiveTimers = true;
           }
         }
+        
+        // Remove from active set if no timers remain
+        if (!hasActiveTimers) {
+          this._activeAbilities.delete(abilityID);
+        }
+      }
+      
+      // Optimization #1: Disable ticking if all timers finished
+      if (this._activeTimerCount === 0) {
+        this._setTicking(false);
       }
     }
     
@@ -292,6 +319,7 @@ export default function (parentClass) {
 
     _loadFromJson(o) {
       this._abilities.clear();
+      this._activeAbilities.clear();
       this._activeTimerCount = 0;
       
       if (o.abilities) {
@@ -308,9 +336,24 @@ export default function (parentClass) {
           const stackCooldown = abilityData.stackCooldown !== undefined ? abilityData.stackCooldown : 0;
           
           // Count active timers
-          if (cooldown > 0) this._activeTimerCount++;
-          if (stackCooldown > 0) this._activeTimerCount++;
-          if (abilityData.hasRemovalScheduled) this._activeTimerCount++;
+          let hasActiveTimers = false;
+          if (cooldown > 0) {
+            this._activeTimerCount++;
+            hasActiveTimers = true;
+          }
+          if (stackCooldown > 0) {
+            this._activeTimerCount++;
+            hasActiveTimers = true;
+          }
+          if (abilityData.hasRemovalScheduled) {
+            this._activeTimerCount++;
+            hasActiveTimers = true;
+          }
+          
+          // Add to active set if has timers
+          if (hasActiveTimers) {
+            this._activeAbilities.add(abilityData.id);
+          }
           
           this._abilities.set(abilityData.id, {
             cooldown: cooldown,
@@ -326,6 +369,11 @@ export default function (parentClass) {
             data: abilityData.data && abilityData.data.length > 0 ? new Map(abilityData.data) : null
           });
         }
+      }
+      
+      // Re-enable ticking if we loaded any active timers
+      if (this._activeTimerCount > 0) {
+        this._setTicking(true);
       }
       
       this._invalidateCache();

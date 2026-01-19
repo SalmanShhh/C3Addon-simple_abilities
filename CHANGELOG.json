@@ -23,5 +23,10 @@
     "added": "- Expiration TIme for abilities shows up on Debugger.\n- GetExpirationProgress(Ability ID) expression ",
     "changed": "",
     "fixed": ""
+  },
+  "1.3.0.0": {
+    "added": "- GetMaxExpirationTime() expression.",
+    "changed": "",
+    "fixed": "- performance improvements, the addon will now scale significantly better. With 1000+ instances having mostly idle abilities, only the few with active cooldowns/regeneration will consume CPU time, meaning it only ticks if theres an active timer (expiration/cooldowns)"
   }
 }
