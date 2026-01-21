@@ -9,7 +9,7 @@
 
 #### What's New in 1.4.0.0
 **Added:**
-- Creating Abilities with cooldowns now have added parameter for it to be activated instantly.
+- Creating Abilities with cooldowns now have added parameter for it to be activated instantly. (CreateAbilityWithCooldown & CreateAbilityWithCooldownAndStacks)
 
 
 <sub>[View full changelog](#changelog)</sub>
@@ -116,7 +116,7 @@ npm run dev
 ### Version 1.4.0.0
 
 **Added:**
-- Creating Abilities with cooldowns now have added parameter for it to be activated instantly.
+- Creating Abilities with cooldowns now have added parameter for it to be activated instantly. (CreateAbilityWithCooldown & CreateAbilityWithCooldownAndStacks)
 
 ---
 
