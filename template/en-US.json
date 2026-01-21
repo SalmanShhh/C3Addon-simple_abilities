@@ -49,7 +49,7 @@
           },
           "CreateAbilityWithCooldown": {
             "list-name": "Create ability with cooldown",
-            "display-text": "Create ability [b]{0}[/b] with [b]{1}[/b] second cooldown",
+            "display-text": "Create ability [b]{0}[/b] with [b]{1}[/b] second cooldown (reset instantly: {2})",
             "description": "Give the object an ability and set its cooldown in one action. Useful for initial setup.",
             "params": {
               "abilityID": {
@@ -59,12 +59,20 @@
               "cooldown": {
                 "name": "Cooldown",
                 "desc": "Cooldown duration in seconds"
+              },
+              "resetInstantly": {
+                "name": "Reset cooldown instantly",
+                "desc": "Whether the ability should start ready to use (cooldown at 0)",
+                "items": {
+                  "yes": "Yes",
+                  "no": "No"
+                }
               }
             }
           },
           "CreateAbilityWithCooldownAndStacks": {
             "list-name": "Create ability with cooldown and stacks",
-            "display-text": "Create ability [b]{0}[/b] with [b]{1}[/b]s cooldown and [b]{2}[/b] max stacks",
+            "display-text": "Create ability [b]{0}[/b] with [b]{1}[/b]s cooldown and [b]{2}[/b] max stacks (reset instantly: {3})",
             "description": "Give the object an ability and set its cooldown and max stacks in one action. Perfect for charge-based abilities.",
             "params": {
               "abilityID": {
@@ -78,6 +86,14 @@
               "maxStacks": {
                 "name": "Max stacks",
                 "desc": "Maximum number of charges"
+              },
+              "resetInstantly": {
+                "name": "Reset cooldown instantly",
+                "desc": "Whether the ability should start with full charges ready to use",
+                "items": {
+                  "yes": "Yes",
+                  "no": "No"
+                }
               }
             }
           },

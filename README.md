@@ -1,15 +1,16 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Simple Abilities
 <i>A lightweight ability system for fast-paced action games. Handles ability granting, cooldowns, activation callbacks, and custom data storage. Perfect for Nuclear Throne-style arcade games with quick ability activations and passive mutations.</i> <br>
-### Version 1.3.1.0
+### Version 1.4.0.0
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.3.1.0.c3addon/salmanshh_simple_abilities-1.3.1.0.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases/download/salmanshh_simple_abilities-1.4.0.0.c3addon/salmanshh_simple_abilities-1.4.0.0.c3addon)
 <br>
 <sub> [See all releases](https://github.com/SalmanShhh/C3Addon-simple_abilities/releases) </sub> <br>
 
-#### What's New in 1.3.1.0
-**Fixed:**
-- "IsAbilityReady" condition now properly includes stack availability
+#### What's New in 1.4.0.0
+**Added:**
+- Creating Abilities with cooldowns now have added parameter for it to be activated instantly.
+
 
 <sub>[View full changelog](#changelog)</sub>
 
@@ -55,8 +56,8 @@ npm run dev
 | Activate ability | Trigger an ability activation callback. Only works if ability is ready (off cooldown and enabled). | Ability ID             *(string)* <br> |
 | Clear all abilities | Remove all abilities from the object. Triggers removal event for each ability. |  |
 | Create ability | Give the object an ability. Creates a new ability slot if it doesn't exist. | Ability ID             *(string)* <br> |
-| Create ability with cooldown | Give the object an ability and set its cooldown in one action. Useful for initial setup. | Ability ID             *(string)* <br>Cooldown             *(number)* <br> |
-| Create ability with cooldown and stacks | Give the object an ability and set its cooldown and max stacks in one action. Perfect for charge-based abilities. | Ability ID             *(string)* <br>Cooldown             *(number)* <br>Max stacks             *(number)* <br> |
+| Create ability with cooldown | Give the object an ability and set its cooldown in one action. Useful for initial setup. | Ability ID             *(string)* <br>Cooldown             *(number)* <br>Reset cooldown instantly             *(combo)* <br> |
+| Create ability with cooldown and stacks | Give the object an ability and set its cooldown and max stacks in one action. Perfect for charge-based abilities. | Ability ID             *(string)* <br>Cooldown             *(number)* <br>Max stacks             *(number)* <br>Reset cooldown instantly             *(combo)* <br> |
 | Create temporary ability | Create an ability that automatically removes itself after a duration. If ability already exists, just schedules new removal time Perfect for temporary power-ups and time-limited buffs. | Ability ID             *(string)* <br>Duration             *(number)* <br> |
 | Remove ability | Remove an ability from the object. Deletes all associated data. | Ability ID             *(string)* <br> |
 | Remove ability after duration | Schedule automatic removal of an ability after a duration. Useful for temporary power-ups and time-limited abilities. | Ability ID             *(string)* <br>Duration             *(number)* <br> |
@@ -111,6 +112,13 @@ npm run dev
 
 ---
 ## Changelog
+
+### Version 1.4.0.0
+
+**Added:**
+- Creating Abilities with cooldowns now have added parameter for it to be activated instantly.
+
+---
 
 ### Version 1.3.1.0
 

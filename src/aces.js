@@ -54,7 +54,7 @@ action(
   "CreateAbilityWithCooldown",
   {
     listName: "Create ability with cooldown",
-    displayText: "Create ability [b]{0}[/b] with [b]{1}[/b] second cooldown",
+    displayText: "Create ability [b]{0}[/b] with [b]{1}[/b] second cooldown (reset instantly: {2})",
     description: "Give the object an ability and set its cooldown in one action. Useful for initial setup.",
     isAsync: false,
     highlight: false,
@@ -74,23 +74,37 @@ action(
         type: "number",
         initialValue: "0",
       },
+      {
+        id: "resetInstantly",
+        name: "Reset cooldown instantly",
+        desc: "Whether the ability should start ready to use (cooldown at 0)",
+        type: "combo",
+        initialValue: "no",
+        items: [
+          { yes: "Yes" },
+          { no: "No" },
+        ],
+      },
     ],
   },
-  function (abilityID, cooldown) {
+  function (abilityID, cooldown, resetInstantly) {
     if (!abilityID) return;
     
     const cooldownValue = Math.max(0, cooldown);
+    const shouldResetInstantly = resetInstantly === "yes";
     
     // Create or update ability
     if (!this._abilities.has(abilityID)) {
-      if (cooldownValue > 0) {
+      const actualCooldown = shouldResetInstantly ? 0 : cooldownValue;
+      
+      if (actualCooldown > 0) {
         this._activeTimerCount++;
         this._activeAbilities.add(abilityID);
         if (this._activeTimerCount === 1) this._setTicking(true);
       }
       
       this._abilities.set(abilityID, {
-        cooldown: cooldownValue,
+        cooldown: actualCooldown,
         maxCooldown: cooldownValue,
         flags: 1,  // FLAG_ENABLED
         stacks: 1,
@@ -109,11 +123,11 @@ action(
       // If ability exists, just update the cooldown
       const ability = this._abilities.get(abilityID);
       const wasOnCooldown = ability.cooldown > 0;
-      ability.cooldown = cooldownValue;
+      ability.cooldown = shouldResetInstantly ? 0 : cooldownValue;
       ability.maxCooldown = Math.max(ability.maxCooldown, cooldownValue);
       ability.canRegenerate = ability.maxCooldown > 0;
       
-      if (!wasOnCooldown && cooldownValue > 0) {
+      if (!wasOnCooldown && !shouldResetInstantly && cooldownValue > 0) {
         this._activeTimerCount++;
         this._activeAbilities.add(abilityID);
         if (this._activeTimerCount === 1) this._setTicking(true);
@@ -127,7 +141,7 @@ action(
   "CreateAbilityWithCooldownAndStacks",
   {
     listName: "Create ability with cooldown and stacks",
-    displayText: "Create ability [b]{0}[/b] with [b]{1}[/b]s cooldown and [b]{2}[/b] max stacks",
+    displayText: "Create ability [b]{0}[/b] with [b]{1}[/b]s cooldown and [b]{2}[/b] max stacks (reset instantly: {3})",
     description: "Give the object an ability and set its cooldown and max stacks in one action. Perfect for charge-based abilities.",
     isAsync: false,
     highlight: false,
@@ -154,13 +168,25 @@ action(
         type: "number",
         initialValue: "1",
       },
+      {
+        id: "resetInstantly",
+        name: "Reset cooldown instantly",
+        desc: "Whether the ability should start with full charges ready to use",
+        type: "combo",
+        initialValue: "yes",
+        items: [
+          { yes: "Yes" },
+          { no: "No" },
+        ],
+      },
     ],
   },
-  function (abilityID, cooldown, maxStacks) {
+  function (abilityID, cooldown, maxStacks, resetInstantly) {
     if (!abilityID) return;
     
     const cooldownValue = Math.max(0, cooldown);
     const maxStacksValue = Math.max(1, Math.floor(maxStacks));
+    const shouldResetInstantly = resetInstantly === "yes";
     
     // Create or update ability
     if (!this._abilities.has(abilityID)) {
@@ -168,15 +194,22 @@ action(
         cooldown: 0,
         maxCooldown: cooldownValue,
         flags: 1,  // FLAG_ENABLED
-        stacks: maxStacksValue,
+        stacks: shouldResetInstantly ? maxStacksValue : 0,
         maxStacks: maxStacksValue,
-        stackCooldown: 0,
+        stackCooldown: shouldResetInstantly ? 0 : cooldownValue,
         canRegenerate: cooldownValue > 0,
         removeAt: 0,
         hasRemovalScheduled: false,
         expirationDuration: 0,
         data: null
       });
+      
+      // Only track timers if not instantly reset
+      if (!shouldResetInstantly && cooldownValue > 0) {
+        this._activeTimerCount++;
+        this._activeAbilities.add(abilityID);
+        if (this._activeTimerCount === 1) this._setTicking(true);
+      }
       
       this._invalidateCache();
       this._triggerAbility(abilityID, "OnAbilityCreated");
@@ -185,7 +218,8 @@ action(
       const ability = this._abilities.get(abilityID);
       ability.maxCooldown = cooldownValue;
       ability.maxStacks = maxStacksValue;
-      ability.stacks = Math.min(ability.stacks, maxStacksValue);
+      ability.stacks = shouldResetInstantly ? maxStacksValue : Math.min(ability.stacks, maxStacksValue);
+      ability.stackCooldown = shouldResetInstantly ? 0 : ability.stackCooldown;
       ability.canRegenerate = cooldownValue > 0;
     }
   }

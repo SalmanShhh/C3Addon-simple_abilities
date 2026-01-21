@@ -33,5 +33,10 @@
     "added": "",
     "changed": "",
     "fixed": "- \"IsAbilityReady\" condition now properly includes stack availability"
+  },
+  "1.4.0.0": {
+    "added": "- Creating Abilities with cooldowns now have added parameter for it to be activated instantly.",
+    "changed": "",
+    "fixed": ""
   }
 }
